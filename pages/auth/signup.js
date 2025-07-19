@@ -21,12 +21,15 @@ async function handleSubmit(e) {
       body: JSON.stringify(form),
     });
 
-    // čtení JSON / textu
+    // přečti to jednou jako text
+    const text = await res.text();
+
+    // zkusti parsovat JSON; pokud to nejde, použij čistý text jako error
     let data;
     try {
-      data = await res.json();
+      data = JSON.parse(text);
     } catch {
-      data = { error: await res.text() };
+      data = { error: text };
     }
 
     if (res.ok) {
@@ -36,10 +39,11 @@ async function handleSubmit(e) {
       alert(data.error || "Něco se pokazilo při registraci.");
     }
   } catch (err) {
-    console.error("Fetch selhal:", err);
+    console.error("Network/Server error:", err);
     alert("Chyba sítě nebo server není dostupný.");
   }
 }
+
 
 
   return (
