@@ -12,21 +12,35 @@ export default function SignUp() {
   });
   const router = useRouter();
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const res = await fetch("/api/auth/signup", {
+async function handleSubmit(e) {
+  e.preventDefault();
+  try {
+    const res = await fetch("/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
+
+    // čtení JSON / textu
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      data = { error: await res.text() };
+    }
+
     if (res.ok) {
       alert("Registrace proběhla úspěšně! Nyní se přihlas.");
       router.push("/auth/signin");
     } else {
-      const { error } = await res.json();
-      alert(error);
+      alert(data.error || "Něco se pokazilo při registraci.");
     }
+  } catch (err) {
+    console.error("Fetch selhal:", err);
+    alert("Chyba sítě nebo server není dostupný.");
   }
+}
+
 
   return (
     <div className="max-w-md mx-auto p-6">
