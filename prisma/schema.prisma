@@ -1,4 +1,18 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "sqlite"         // nebo "postgresql"
+  url      = "file:./dev.db"  // nebo env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         String   @id @default(cuid())
+  firstName  String
+  lastName   String
+  email      String   @unique
+  company    String?
+  password   String
+  createdAt  DateTime @default(now())
 }

@@ -5,22 +5,35 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    res.status(405).end();
-    return;
+    return res.status(405).end();
   }
 
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, company, password } = req.body;
 
+  // základní validace
+  if (!firstName || !lastName || !email || !password) {
+    return res.status(400).json({ error: "Vyplň všechny povinné údaje." });
+  }
+
+  // kontrola duplicity emailu
   const exists = await prisma.user.findUnique({ where: { email } });
   if (exists) {
-    res.status(400).json({ error: "Email už existuje." });
-    return;
+    return res.status(400).json({ error: "Email už je zaregistrován." });
   }
 
+  // zahashuj heslo
   const hashed = await hash(password, 10);
+
+  // vytvoř uživatele
   const user = await prisma.user.create({
-    data: { name, email, password: hashed },
+    data: {
+      firstName,
+      lastName,
+      email,
+      company: company || null,
+      password: hashed,
+    },
   });
 
-  res.status(201).json({ id: user.id, email: user.email });
+  return res.status(201).json({ id: user.id, email: user.email });
 }

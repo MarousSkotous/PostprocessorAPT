@@ -3,7 +3,8 @@ import { getSession } from "next-auth/react";
 export default function Home({ user }) {
   return (
     <div className="p-8">
-      <h1>Vítej, {user.name || user.email}!</h1>
+    <h1>Vítej, {user.firstName} {user.lastName}!</h1>
+
     </div>
   );
 }
