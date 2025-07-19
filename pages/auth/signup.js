@@ -12,39 +12,37 @@ export default function SignUp() {
   });
   const router = useRouter();
 
-async function handleSubmit(e) {
-  e.preventDefault();
-  try {
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-
-    // přečti to jednou jako text
-    const text = await res.text();
-
-    // zkusti parsovat JSON; pokud to nejde, použij čistý text jako error
-    let data;
+  async function handleSubmit(e) {
+    e.preventDefault();
     try {
-      data = JSON.parse(text);
-    } catch {
-      data = { error: text };
-    }
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    if (res.ok) {
-      alert("Registrace proběhla úspěšně! Nyní se přihlas.");
-      router.push("/auth/signin");
-    } else {
-      alert(data.error || "Něco se pokazilo při registraci.");
+      // přečti to jako text
+      const text = await res.text();
+
+      // zkusti parsovat JSON; pokud to nejde, použij čistý text jako error
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = { error: text };
+      }
+
+      if (res.ok) {
+        alert("Registrace proběhla úspěšně! Nyní se přihlas.");
+        router.push("/auth/signin");
+      } else {
+        alert(data.error || "Něco se pokazilo při registraci.");
+      }
+    } catch (err) {
+      console.error("Network/Server error:", err);
+      alert("Chyba sítě nebo server není dostupný.");
     }
-  } catch (err) {
-    console.error("Network/Server error:", err);
-    alert("Chyba sítě nebo server není dostupný.");
   }
-}
-
-
 
   return (
     <div className="max-w-md mx-auto p-6">
@@ -124,8 +122,11 @@ async function handleSubmit(e) {
 
       <p className="mt-6 text-center">
         Už máte účet?{" "}
-        <Link href="/auth/signin">
-          <a className="text-blue-600 hover:underline">Přihlásit se</a>
+        <Link
+          href="/auth/signin"
+          className="text-blue-600 hover:underline"
+        >
+          Přihlásit se
         </Link>
       </p>
     </div>

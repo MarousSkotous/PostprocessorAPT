@@ -42,7 +42,9 @@ export default function SignIn() {
           <input
             type="password"
             value={form.password}
-            onChange={e => setForm({ ...form, password: e.target.value })}
+            onChange={e =>
+              setForm({ ...form, password: e.target.value })
+            }
             className="w-full p-2 border rounded"
             required
           />
@@ -56,8 +58,8 @@ export default function SignIn() {
       </form>
       <p className="mt-6 text-center">
         Ještě nemáte účet?{" "}
-        <Link href="/auth/signup">
-          <a className="text-blue-600 hover:underline">Registrovat se</a>
+        <Link href="/auth/signup" className="text-blue-600 hover:underline">
+          Registrovat se
         </Link>
       </p>
     </div>
