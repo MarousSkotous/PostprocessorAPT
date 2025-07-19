@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function SignUp() {
   const [form, setForm] = useState({
@@ -28,69 +29,87 @@ export default function SignUp() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 space-y-4">
-      <h1 className="text-2xl font-bold">Registrace</h1>
+    <div className="max-w-md mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6">Registrace</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block mb-1">Jméno*</label>
+          <input
+            type="text"
+            value={form.firstName}
+            onChange={e =>
+              setForm({ ...form, firstName: e.target.value })
+            }
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
 
-      <div>
-        <label className="block mb-1">Jméno*</label>
-        <input
-          type="text"
-          value={form.firstName}
-          onChange={e => setForm({ ...form, firstName: e.target.value })}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
+        <div>
+          <label className="block mb-1">Příjmení*</label>
+          <input
+            type="text"
+            value={form.lastName}
+            onChange={e =>
+              setForm({ ...form, lastName: e.target.value })
+            }
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
 
-      <div>
-        <label className="block mb-1">Příjmení*</label>
-        <input
-          type="text"
-          value={form.lastName}
-          onChange={e => setForm({ ...form, lastName: e.target.value })}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
+        <div>
+          <label className="block mb-1">Email*</label>
+          <input
+            type="email"
+            value={form.email}
+            onChange={e =>
+              setForm({ ...form, email: e.target.value })
+            }
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
 
-      <div>
-        <label className="block mb-1">Email*</label>
-        <input
-          type="email"
-          value={form.email}
-          onChange={e => setForm({ ...form, email: e.target.value })}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
+        <div>
+          <label className="block mb-1">Firma</label>
+          <input
+            type="text"
+            value={form.company}
+            onChange={e =>
+              setForm({ ...form, company: e.target.value })
+            }
+            className="w-full p-2 border rounded"
+          />
+        </div>
 
-      <div>
-        <label className="block mb-1">Firma</label>
-        <input
-          type="text"
-          value={form.company}
-          onChange={e => setForm({ ...form, company: e.target.value })}
-          className="w-full p-2 border rounded"
-        />
-      </div>
+        <div>
+          <label className="block mb-1">Heslo*</label>
+          <input
+            type="password"
+            value={form.password}
+            onChange={e =>
+              setForm({ ...form, password: e.target.value })
+            }
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
 
-      <div>
-        <label className="block mb-1">Heslo*</label>
-        <input
-          type="password"
-          value={form.password}
-          onChange={e => setForm({ ...form, password: e.target.value })}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
+        <button
+          type="submit"
+          className="w-full p-3 bg-blue-600 text-white rounded-lg"
+        >
+          Registrovat
+        </button>
+      </form>
 
-      <button
-        type="submit"
-        className="w-full p-3 bg-blue-600 text-white rounded-lg"
-      >
-        Registrovat
-      </button>
-    </form>
+      <p className="mt-6 text-center">
+        Už máte účet?{" "}
+        <Link href="/auth/signin">
+          <a className="text-blue-600 hover:underline">Přihlásit se</a>
+        </Link>
+      </p>
+    </div>
   );
 }
