@@ -4,27 +4,28 @@ import { hash } from "bcrypt";
 const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
+  // Debug: zjistit, jakou metodu voláme
+  console.log("🔥 /api/signup", req.method);
+
   if (req.method !== "POST") {
-    return res.status(405).end();
+    res.status(405).json({ error: "Method not allowed" });
+    return;
   }
 
   const { firstName, lastName, email, company, password } = req.body;
 
-  // základní validace
   if (!firstName || !lastName || !email || !password) {
-    return res.status(400).json({ error: "Vyplň všechny povinné údaje." });
+    res.status(400).json({ error: "Vyplň všechny povinné údaje." });
+    return;
   }
 
-  // kontrola duplicity emailu
   const exists = await prisma.user.findUnique({ where: { email } });
   if (exists) {
-    return res.status(400).json({ error: "Email už je zaregistrován." });
+    res.status(400).json({ error: "Email už je zaregistrován." });
+    return;
   }
 
-  // zahashuj heslo
   const hashed = await hash(password, 10);
-
-  // vytvoř uživatele
   const user = await prisma.user.create({
     data: {
       firstName,
@@ -35,5 +36,5 @@ export default async function handler(req, res) {
     },
   });
 
-  return res.status(201).json({ id: user.id, email: user.email });
+  res.status(201).json({ id: user.id, email: user.email });
 }
